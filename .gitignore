@@ -1,0 +1,76 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Virtual Environments ---
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Jupyter Notebook ---
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+# Clear output of notebooks if desired (not recommended here unless user asked)
+
+# --- Data and Models ---
+# Ignore all data except for potential README/keep files
+data/*
+!data/.gitkeep
+# Ignore common model weight/artifact extensions
+*.h5
+*.pkl
+*.pth
+*.joblib
+*.sav
+*.onnx
+*.weights
+*.pt
+
+# --- IDEs and Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.pydevproject
+.settings/
+
+# --- OS Specific ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# --- Logs and Misc ---
+*.log
+.coverage
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
