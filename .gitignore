@@ -39,3 +39,4 @@ venv.bak/
 .project
 .pydevproject
 .settings/
+.DS_Store
