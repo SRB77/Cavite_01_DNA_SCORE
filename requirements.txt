@@ -1,10 +1,26 @@
+# Developer DNA Matrix — Phase 3
+# Install: pip install -r requirements.txt
+
+# Core ML
+scikit-learn==1.3.0
 pandas==2.1.0
 numpy==1.24.3
-scikit-learn==1.3.0
+scipy==1.11.2
+
+# Deep learning (Phase 2)
 tensorflow==2.13.0
+
+# Visualization
 matplotlib==3.7.2
 seaborn==0.12.2
-scipy==1.11.2
-faker==19.3.1
+
+# Notebook environment
 jupyter==1.0.0
 ipykernel==6.25.1
+nbformat==5.9.2
+
+# Data generation
+faker==19.3.1
+
+# Reporting / PDF export
+reportlab==4.0.4
