@@ -37,8 +37,10 @@ from sklearn.calibration     import CalibratedClassifierCV
 from sklearn.neural_network  import MLPClassifier
 
 np.random.seed(42)
-OUT = Path("/home/claude/phase3_out")
-OUT.mkdir(exist_ok=True)
+OUT_DATA = Path("data")
+OUT_FIGS = Path("figures")
+OUT_DATA.mkdir(exist_ok=True)
+OUT_FIGS.mkdir(exist_ok=True)
 
 TIER_NAMES  = {0: "Beginner", 1: "Intermediate", 2: "Expert"}
 TIER_LIST   = ["Beginner", "Intermediate", "Expert"]
@@ -280,8 +282,8 @@ def generate_dataset(n_standard: int = 2000, n_hybrid: int = 400,
 
 
 df_raw = generate_dataset()
-df_raw.to_csv(OUT / "github_dna_phase3_raw.csv", index=False)
-print(f"  ✓ Saved raw dataset → {OUT/'github_dna_phase3_raw.csv'}")
+df_raw.to_csv(OUT_DATA / "github_dna_phase3_raw.csv", index=False)
+print(f"  ✓ Saved raw dataset → {OUT_DATA/'github_dna_phase3_raw.csv'}")
 
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -455,7 +457,7 @@ results_all.append(r); preds_all["Ensemble"] = p
 print(f"    F1={r['f1_macro']:.4f} ← Phase 3 Winner")
 
 results_df = pd.DataFrame(results_all)
-results_df.to_csv(OUT / "phase3_results.csv", index=False)
+results_df.to_csv(OUT_DATA / "phase3_results.csv", index=False)
 print(f"\n  Model summary:")
 print(results_df[["model","f1_macro","accuracy"]].to_string(index=False))
 
@@ -532,7 +534,7 @@ def compute_continuous_output(X_sc, model, scaler, X_raw):
     })
 
 output_df = compute_continuous_output(X_test_sc, ensemble, scaler, X_test.reset_index(drop=True))
-output_df.to_csv(OUT / "phase3_continuous_output.csv", index=False)
+output_df.to_csv(OUT_DATA / "phase3_continuous_output.csv", index=False)
 print(f"  Score range: [{output_df['dna_score'].min():.1f}, {output_df['dna_score'].max():.1f}]")
 print(f"  Mean confidence: {output_df['confidence'].mean():.3f}")
 sample = output_df.head(5)[["dna_score","tier_name","confidence"]]
@@ -586,7 +588,7 @@ for ax, (name, yp, accent) in zip(axes, models_to_plot):
                  color="white", fontsize=11, fontweight="bold", pad=8)
 
 plt.tight_layout()
-plt.savefig(OUT / "phase3_confusion_matrix.png", dpi=150,
+plt.savefig(OUT_FIGS / "phase3_confusion_matrix.png", dpi=150,
             bbox_inches="tight", facecolor="#0D1117")
 plt.close()
 print("  ✓ phase3_confusion_matrix.png")
@@ -719,7 +721,7 @@ for i in range(1, 3):
                  color="#10B981", fontsize=9, fontweight="bold",
                  arrowprops=dict(arrowstyle="-", color="#10B981", lw=1))
 
-plt.savefig(OUT / "cross_phase_comparison.png", dpi=150,
+plt.savefig(OUT_FIGS / "cross_phase_comparison.png", dpi=150,
             bbox_inches="tight", facecolor="#0D1117")
 plt.close()
 print("  ✓ cross_phase_comparison.png")
@@ -797,7 +799,7 @@ ax.legend(handles=legend_patches2, framealpha=0.2, labelcolor="white",
 ax.tick_params(colors="#8B949E")
 
 plt.tight_layout()
-plt.savefig(OUT / "continuous_score_distribution.png", dpi=150,
+plt.savefig(OUT_FIGS / "continuous_score_distribution.png", dpi=150,
             bbox_inches="tight", facecolor="#0D1117")
 plt.close()
 print("  ✓ continuous_score_distribution.png")
@@ -835,7 +837,7 @@ ax.legend(handles=legend_patches3, loc="lower right", framealpha=0.2,
           fontsize=10)
 
 plt.tight_layout()
-plt.savefig(OUT / "feature_importance_phase3.png", dpi=150,
+plt.savefig(OUT_FIGS / "feature_importance_phase3.png", dpi=150,
             bbox_inches="tight", facecolor="#0D1117")
 plt.close()
 print("  ✓ feature_importance_phase3.png")
@@ -888,6 +890,10 @@ notebook["cells"].append(md_cell(
 # ── Cell 1 — Imports ──────────────────────────────────────────────────────
 notebook["cells"].append(code_cell(
     "# Cell 1 — Imports\n"
+    "import os\n"
+    "if os.path.basename(os.getcwd()) == 'notebooks':\n"
+    "    os.chdir('..')\n"
+    "print(f'Working directory: {os.getcwd()}')\n\n"
     "import warnings; warnings.filterwarnings('ignore')\n"
     "import numpy as np\nimport pandas as pd\n"
     "import matplotlib.pyplot as plt\nimport seaborn as sns\n\n"
@@ -1381,7 +1387,7 @@ notebook["cells"].append(md_cell(
     "cell-12"
 ))
 
-with open(OUT / "05_phase3_DDM.ipynb", "w") as f:
+with open(Path("notebooks") / "05_phase3_DDM.ipynb", "w") as f:
     _json.dump(notebook, f, indent=1)
 
 print(f"  ✓ 05_phase3_DDM.ipynb  ({len(notebook['cells'])} cells)")
@@ -1405,8 +1411,14 @@ print(f"    Phase 1 best (SVM)      → 0.8116")
 print(f"    Phase 2 best (MLP)      → 0.8164  (+0.0048)")
 print(f"    Phase 3 best (Ensemble) → {best_f1:.4f}  ({best_f1-p1_f1:+.4f} vs P1)")
 
-print(f"\n  Output files:")
-for f in sorted(OUT.iterdir()):
-    kb = f.stat().st_size // 1024
-    print(f"    {f.name:<45} {kb:>5} KB")
+print(f"\n  Output files (data):")
+for f in sorted(OUT_DATA.iterdir()):
+    if f.is_file():
+        kb = f.stat().st_size // 1024
+        print(f"    {f.name:<45} {kb:>5} KB")
+print(f"\n  Output files (figures):")
+for f in sorted(OUT_FIGS.iterdir()):
+    if f.is_file():
+        kb = f.stat().st_size // 1024
+        print(f"    {f.name:<45} {kb:>5} KB")
 print("=" * 65)
