@@ -1,0 +1,7 @@
+Phase,Model,F1 Macro,Data,Features,Score Output
+1,Logistic Regression,0.8066,"6,000",28,Tier only
+1,SVM RBF (winner),0.8116,"6,000",28,Tier only
+1,Random Forest,0.8007,"6,000",28,Tier only
+2,MLP (winner),0.8164,"6,000",28,Tier only
+3,GBM,0.8085,"7,000+",33,Score + Tier + Confidence
+3,Ensemble (winner) ★,0.8128,"7,000+",33,Score + Tier + Confidence
